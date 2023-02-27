@@ -2,7 +2,7 @@ const { body } = require('express-validator')
 const checkErrors = require('../helpers/check_erros')
 
 
-const signUpValidator = [
+const registerUserValidator = [
     body('name')
         .notEmpty().withMessage('El campo nombre no puede estar vacio')
         .isLength({ min: 3 }).withMessage('El nombre debe tener más de 3 caracteres')
@@ -24,10 +24,11 @@ const signUpValidator = [
         .isLength({ min: 10 }).withMessage('Ingrese una teléfono válido válida'),
     body('birthDate')
         .notEmpty().withMessage('El campo fecha no puede estar vacio'),
-    checkErrors
+    checkErrors,
 ]
 
 
+
 module.exports = {
-    signUpValidator
+    registerUserValidator
 }
