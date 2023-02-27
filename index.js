@@ -7,14 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/', (req, res) => {
-
-    console.log(req.body, 'Siii')
-    res.send({
-        status: 'oc',
-        result: []
-    })
-})
+app.use('/auth', require('./src/routes/auth'))
 
 
 
