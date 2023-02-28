@@ -7,6 +7,9 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
+/**
+ * @routes Rutas principales de la aplicación
+ */
 app.use('/auth', require('./src/routes/auth'))
 
 

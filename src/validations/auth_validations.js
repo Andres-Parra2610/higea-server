@@ -2,6 +2,16 @@ const { body } = require('express-validator')
 const checkErrors = require('../helpers/check_erros')
 
 
+const loginUserValidator = [
+    body('ci')
+        .notEmpty().withMessage('La cédula no puede estar vacia')
+        .isNumeric().withMessage('Sólo acepta números')
+        .isLength({ min: 7, max: 8 }).withMessage('Cédula inválida'),
+    body('password')
+        .notEmpty().withMessage('La contraseña no puede ser vacía'),
+    checkErrors
+]
+
 const registerUserValidator = [
     body('name')
         .notEmpty().withMessage('El campo nombre no puede estar vacio')
@@ -30,5 +40,6 @@ const registerUserValidator = [
 
 
 module.exports = {
+    loginUserValidator,
     registerUserValidator
 }

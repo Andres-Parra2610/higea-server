@@ -7,7 +7,7 @@ const checkErrors = (req = request, res = response, next) => {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
-        res.status(401).send({
+        return res.status(401).send({
             ok: false,
             error: errors.mapped(),
             result: []

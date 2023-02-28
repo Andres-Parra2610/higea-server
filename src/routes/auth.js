@@ -1,8 +1,16 @@
 const { Router } = require('express')
-const { registerUser, verifyCode } = require('../controllers/auth_controller')
-const { registerUserValidator } = require('../validations/auth_validations')
+const { loginUser, registerUser, verifyCode } = require('../controllers/auth_controller')
+const { registerUserValidator, loginUserValidator } = require('../validations/auth_validations')
 
 const router = Router()
+
+
+
+/**
+ * @endpoint LOGIN DE ACCESO A LA APP
+ * @body {ci, password}
+ */
+router.post('/login', loginUserValidator, loginUser)
 
 /**
  * @endpoint ENVIÓ DE CÓDIGO DE VERIFICACIÓN

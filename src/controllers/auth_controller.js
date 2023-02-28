@@ -1,9 +1,44 @@
 const { response, request } = require('express')
-const { registerPatient } = require('../models/patient')
+const { registerPatient, loginPatient } = require('../models/patient')
 const fieldRegister = require('../helpers/field_register')
 const sendCodeEmail = require('../services/send_code_email')
 
 
+
+
+const loginUser = async (req = request, res = response) => {
+
+    const ciExist = await fieldRegister('idpaciente', 'paciente', req.body.ci)
+
+    if (!ciExist) {
+        return res.status(401).send({
+            ok: false,
+            error: {
+                msg: 'Usuario inexistente'
+            },
+            results: []
+        })
+    }
+
+    const user = await loginPatient(req.body.ci)
+
+
+    if (user.contrasena_paciente != req.body.password) {
+        return res.status(401).send({
+            ok: false,
+            error: {
+                mgs: 'El usuario o la contraseña son incorrectos'
+            },
+            results: []
+        })
+    }
+
+    return res.send({
+        ok: true,
+        error: {},
+        results: [user]
+    })
+}
 
 const registerUser = async (req = request, res = response) => {
     const ciExist = await fieldRegister('idpaciente', 'paciente', req.body.ci)
@@ -63,6 +98,7 @@ const verifyCode = async (req = request, res = response) => {
 
 
 module.exports = {
+    loginUser,
     registerUser,
     verifyCode
 }
