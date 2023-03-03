@@ -20,7 +20,7 @@ router.post('/register-user', registerUserValidator, registerUser)
 
 /**
  * @endpoint VERIFICAR CÓDIGO Y REGISTRAR USUARIO EN LA BD
- * @body {name, lastName, ci, email, phone, birthDate, gender}
+ * @body {name, lastName, ci, email, phone, birthDate, gender, codeVerification}
  */
 router.post('/verify-code', verifyCode)
 

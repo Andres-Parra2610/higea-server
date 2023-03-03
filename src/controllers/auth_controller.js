@@ -16,7 +16,6 @@ const loginUser = async (req = request, res = response) => {
             error: {
                 msg: 'Usuario inexistente'
             },
-            results: []
         })
     }
 
@@ -29,14 +28,13 @@ const loginUser = async (req = request, res = response) => {
             error: {
                 mgs: 'El usuario o la contraseña son incorrectos'
             },
-            results: []
         })
     }
 
-    return res.send({
+    return res.status(200).send({
         ok: true,
         error: {},
-        results: [user]
+        user: user
     })
 }
 
