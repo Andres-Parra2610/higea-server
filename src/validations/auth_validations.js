@@ -34,6 +34,9 @@ const registerUserValidator = [
         .isLength({ min: 10 }).withMessage('Ingrese una teléfono válido válida'),
     body('birthDate')
         .notEmpty().withMessage('El campo fecha no puede estar vacio'),
+    body('password')
+        .notEmpty().withMessage('El campo password no puede estar vacio')
+        .isLength({ min: 8 }).withMessage('La contraseña debe ser mínimo de 8 caracteres'),
     checkErrors,
 ]
 

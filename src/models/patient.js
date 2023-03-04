@@ -12,11 +12,11 @@ const loginPatient = async (ci) => {
 }
 
 const registerPatient = async (user) => {
-    const { ci, name, lastName, email, gender, phone, birthDate } = user
+    const { ci, name, lastName, email, phone, birthDate, password } = user
 
-    const query = 'INSERT INTO paciente(idpaciente, nombre_paciente, apellido_paciente, correo_paciente, sexo_paciente, telefono_paciente, fecha_nacimiento_paciente, contrasena_paciente, activo, id_rol) VALUES (?,?,?,?,?,?,?,?,1,3)'
+    const query = 'INSERT INTO paciente(idpaciente, nombre_paciente, apellido_paciente, correo_paciente, telefono_paciente, fecha_nacimiento_paciente, contrasena_paciente, activo, id_rol) VALUES (?,?,?,?,?,?,?,1,3)'
 
-    await pool.query(query, [ci, name, lastName, email, gender, phone, birthDate, ci])
+    await pool.query(query, [ci, name, lastName, email, phone, birthDate, password])
 
     return user
 }

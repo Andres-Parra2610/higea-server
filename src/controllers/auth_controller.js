@@ -22,6 +22,10 @@ const loginUser = async (req = request, res = response) => {
     const user = await loginPatient(req.body.ci)
 
 
+
+
+
+
     if (user.contrasena_paciente != req.body.password) {
         return res.status(401).send({
             ok: false,
@@ -31,12 +35,15 @@ const loginUser = async (req = request, res = response) => {
         })
     }
 
+    delete user.contrasena_paciente
+
     return res.status(200).send({
         ok: true,
         error: {},
         user: user
     })
 }
+//739.20
 
 const registerUser = async (req = request, res = response) => {
     const ciExist = await fieldRegister('idpaciente', 'paciente', req.body.ci)
@@ -87,7 +94,7 @@ const verifyCode = async (req = request, res = response) => {
         ok: true,
         msg: 'Se agregó el usuario correctamente',
         error: {},
-        results: [{ ...result }]
+        user: result
     })
 }
 
