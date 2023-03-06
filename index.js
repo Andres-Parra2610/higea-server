@@ -13,6 +13,7 @@ app.use(cors())
  * @routes Rutas principales de la aplicación
  */
 app.use('/auth', require('./src/routes/auth'))
+app.use('/speciality', require('./src/routes/doctors'))
 
 
 
