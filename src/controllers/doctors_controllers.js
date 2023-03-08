@@ -1,6 +1,6 @@
 const { response, request } = require('express')
 const { getSpecialities } = require('../models/specialities')
-const { getDoctorsBySpeciality } = require('../models/doctors')
+const { getMedicalHoursBySpeciality } = require('../models/doctors')
 
 
 const getAllSpeciality = async (req = request, res = response) => {
@@ -13,7 +13,7 @@ const getAllSpeciality = async (req = request, res = response) => {
     })
 }
 
-const getDoctorsSpeciality = async (req = request, res = response) => {
+const getMecialHours = async (req = request, res = response) => {
 
     const id = req.query.id
 
@@ -25,7 +25,7 @@ const getDoctorsSpeciality = async (req = request, res = response) => {
         })
     }
 
-    const results = await getDoctorsBySpeciality(id)
+    const results = await getMedicalHoursBySpeciality(id)
 
     if (results.length <= 0) {
         return res.status(400).send({
@@ -45,5 +45,5 @@ const getDoctorsSpeciality = async (req = request, res = response) => {
 
 module.exports = {
     getAllSpeciality,
-    getDoctorsSpeciality
+    getMecialHours
 }

@@ -4,7 +4,7 @@ const pool = require('../config/database')
 
 const loginPatient = async (ci) => {
 
-    const query = 'SELECT * FROM paciente WHERE idpaciente = ?'
+    const query = 'SELECT * FROM paciente WHERE cedula_paciente = ?'
 
     const [results] = await pool.query(query, [ci])
 

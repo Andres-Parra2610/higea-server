@@ -8,7 +8,7 @@ const sendCodeEmail = require('../services/send_code_email')
 
 const loginUser = async (req = request, res = response) => {
 
-    const ciExist = await fieldRegister('idpaciente', 'paciente', req.body.ci)
+    const ciExist = await fieldRegister('cedula_paciente', 'paciente', req.body.ci)
 
     if (!ciExist) {
         return res.status(401).send({
@@ -46,7 +46,7 @@ const loginUser = async (req = request, res = response) => {
 //739.20
 
 const registerUser = async (req = request, res = response) => {
-    const ciExist = await fieldRegister('idpaciente', 'paciente', req.body.ci)
+    const ciExist = await fieldRegister('cedula_paciente', 'paciente', req.body.ci)
     const emailExist = await fieldRegister('correo_paciente', 'paciente', req.body.email)
 
     if (ciExist || emailExist) {
