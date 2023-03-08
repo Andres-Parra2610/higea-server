@@ -1,6 +1,7 @@
 const { response, request } = require('express')
 const { getSpecialities } = require('../models/specialities')
-const { getMedicalHoursBySpeciality } = require('../models/doctors')
+const { getMedicalHoursBySpeciality, getDoctorsDatesWorking } = require('../models/doctors')
+const doctorDayWork = require('../helpers/doctor_day_work')
 
 
 const getAllSpeciality = async (req = request, res = response) => {
@@ -41,9 +42,34 @@ const getMecialHours = async (req = request, res = response) => {
     })
 }
 
+const getDoctorDatesWork = async (req = request, res = response) => {
+
+    const ci = req.query.ci
+
+
+    if (ci === undefined || ci.length <= 0) {
+        return res.status(400).send({
+            ok: false,
+            msg: 'El parámetro ci no puede estar vacio',
+            results: []
+        })
+    }
+
+    const doctor = await getDoctorsDatesWorking(ci)
+
+    const daysDoctorWork = doctorDayWork(doctor)
+
+
+    return res.status(200).send({
+        ok: true,
+        results: daysDoctorWork
+    })
+}
+
 
 
 module.exports = {
     getAllSpeciality,
-    getMecialHours
+    getMecialHours,
+    getDoctorDatesWork
 }

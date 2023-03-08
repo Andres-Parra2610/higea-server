@@ -14,6 +14,7 @@ app.use(cors())
  */
 app.use('/auth', require('./src/routes/auth'))
 app.use('/speciality', require('./src/routes/doctors'))
+app.use('/appoiment', require('./src/routes/appoiments'))
 
 
 
