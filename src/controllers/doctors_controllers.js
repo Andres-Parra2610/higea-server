@@ -14,7 +14,7 @@ const getAllSpeciality = async (req = request, res = response) => {
     })
 }
 
-const getMecialHours = async (req = request, res = response) => {
+const getMedicalHours = async (req = request, res = response) => {
 
     const id = req.query.id
 
@@ -44,7 +44,7 @@ const getMecialHours = async (req = request, res = response) => {
 
 const getDoctorDatesWork = async (req = request, res = response) => {
 
-    const ci = req.query.ci
+    const ci = req.params.ci
 
 
     if (ci === undefined || ci.length <= 0) {
@@ -70,6 +70,6 @@ const getDoctorDatesWork = async (req = request, res = response) => {
 
 module.exports = {
     getAllSpeciality,
-    getMecialHours,
+    getMedicalHours,
     getDoctorDatesWork
 }

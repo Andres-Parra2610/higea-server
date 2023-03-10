@@ -4,7 +4,7 @@ const { getAppoiments } = require('../controllers/appoiment_controller')
 
 const router = Router()
 
-router.get('/:doctor/:date/:hour', getAppoiments)
+router.get('/:doctor/:date/', getAppoiments)
 
 
 module.exports = router
