@@ -17,7 +17,7 @@ const avilableAppoiments = (appoiments, doctor, date) => {
                 cedula_medico: parseInt(doctor),
                 fecha_cita: date,
                 hora_cita: curretnHour,
-                cita_estado: 'disponible'
+                cita_estado: 'Disponible'
             })
             startHour.add(1, 'hour')
         }
@@ -34,14 +34,14 @@ const avilableAppoiments = (appoiments, doctor, date) => {
                 cedula_medico: findAviable.cedula_medico,
                 fecha_cita: date,
                 hora_cita: findAviable.hora_cita,
-                cita_estado: 'ocupada'
+                cita_estado: 'Ocupada'
             })
         } else {
             avilableHours.push({
                 cedula_medico: resultAppoiment[0].cedula_medico,
                 fecha_cita: date,
                 hora_cita: curretnHour,
-                cita_estado: 'disponible'
+                cita_estado: 'Disponible'
             })
         }
 
@@ -50,7 +50,7 @@ const avilableAppoiments = (appoiments, doctor, date) => {
     }
 
 
-    console.log(avilableHours)
+    return avilableHours
 
 
 }

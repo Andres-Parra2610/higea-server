@@ -18,11 +18,11 @@ const getAppoiments = async (req = request, res = response) => {
 
     const appoiments = await getAppoimentsByDoc(doctor, date)
 
-    avilableAppoiments(appoiments, doctor, date)
+    const result = avilableAppoiments(appoiments, doctor, date)
 
     return res.status(200).send({
         ok: true,
-        msg: 'Ta bn la petición'
+        results: result
     })
 }
 
