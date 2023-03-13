@@ -11,6 +11,30 @@ const getAppoimentsByDoc = async (doctor, day) => {
     return [appoiment, workinHour[0]]
 }
 
+const getAppoiment = async (appoiment) => {
+
+    const { doctorCi, appoimentDate, appoimentHour } = appoiment
+
+    const query = 'SELECT * FROM cita WHERE cedula_medico = ? AND fecha_cita = ? AND hora_cita = ?'
+
+    const [results] = await pool.query(query, [doctorCi, appoimentDate, appoimentHour])
+
+    return results
+}
+
+const insertAppoiment = async (appoiment) => {
+
+    const { doctorCi, patientCi, appoimentDate, appoimentHour } = appoiment
+
+    const query = 'INSERT INTO cita(cedula_medico, cedula_paciente, fecha_cita, hora_cita, cita_estado) VALUES (?,?,?,?,?)'
+
+    const [results] = await pool.query(query, [doctorCi, patientCi, appoimentDate, appoimentHour, 'ocupada'])
+
+    return results
+}
+
 module.exports = {
-    getAppoimentsByDoc
+    getAppoimentsByDoc,
+    getAppoiment,
+    insertAppoiment
 }

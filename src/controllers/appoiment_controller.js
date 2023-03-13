@@ -1,12 +1,10 @@
 const { response, request } = require('express')
-const { getAppoimentsByDoc } = require('../models/appoiments')
+const { getAppoimentsByDoc, getAppoiment, insertAppoiment } = require('../models/appoiments')
 const avilableAppoiments = require('../helpers/avilable_appoiments')
 
 
 const getAppoiments = async (req = request, res = response) => {
-
     const { doctor, date } = req.params
-
 
     if (!doctor || !date) {
         return res.status(400).send({
@@ -26,6 +24,30 @@ const getAppoiments = async (req = request, res = response) => {
     })
 }
 
+
+const newAppoiment = async (req = request, res = response) => {
+
+    const appoimentBody = req.body
+
+    const appoiment = await getAppoiment(appoimentBody)
+
+    if (appoiment.length >= 1) {
+        return res.status(401).send({
+            ok: false,
+            msg: 'La cita ya está ocupada',
+        })
+    }
+
+    await insertAppoiment(appoimentBody)
+
+    return res.status(200).send({
+        ok: true,
+        msg: 'Se ha agregado la cita correctamente',
+    })
+}
+
+
 module.exports = {
-    getAppoiments
+    getAppoiments,
+    newAppoiment
 }

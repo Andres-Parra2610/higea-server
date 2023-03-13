@@ -22,7 +22,6 @@ const avilableAppoiments = (appoiments, doctor, date) => {
             startHour.add(1, 'hour')
         }
 
-        console.log(avilableHours)
         return avilableHours
     }
 
