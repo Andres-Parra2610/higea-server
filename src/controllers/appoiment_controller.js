@@ -38,11 +38,19 @@ const newAppoiment = async (req = request, res = response) => {
         })
     }
 
-    await insertAppoiment(appoimentBody)
+    const resultAppoiment = await insertAppoiment(appoimentBody)
+
 
     return res.status(200).send({
         ok: true,
         msg: 'Se ha agregado la cita correctamente',
+        result: {
+            id_cita: resultAppoiment.insertId,
+            cedula_medico: appoimentBody.doctorCi,
+            cedula_paciente: appoimentBody.patientCi,
+            fecha_cita: appoimentBody.appoimentDate,
+            hora_cita: appoimentBody.appoimentHour,
+        }
     })
 }
 

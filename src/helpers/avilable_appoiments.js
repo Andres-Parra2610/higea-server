@@ -28,9 +28,12 @@ const avilableAppoiments = (appoiments, doctor, date) => {
     while (startHour.isSameOrBefore(endHour)) {
         const curretnHour = startHour.format('HH:mm:ss');
         const findAviable = resultAppoiment.find(appoiment => appoiment.hora_cita == curretnHour)
+
         if (findAviable) {
             avilableHours.push({
+                id_cita: findAviable.idcita,
                 cedula_medico: findAviable.cedula_medico,
+                cedula_paciente: findAviable.cedula_paciente,
                 fecha_cita: date,
                 hora_cita: findAviable.hora_cita,
                 cita_estado: 'Ocupada'

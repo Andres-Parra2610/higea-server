@@ -8,6 +8,8 @@ const getAppoimentsByDoc = async (doctor, day) => {
     const [appoiment] = await pool.query(query1, [doctor, day])
     const [workinHour] = await pool.query(query2, [doctor])
 
+    console.log(appoiment)
+
     return [appoiment, workinHour[0]]
 }
 
