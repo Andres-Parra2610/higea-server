@@ -8,8 +8,6 @@ const getAllSpeciality = async (req = request, res = response) => {
 
     const results = await getSpecialities()
 
-    console.log('Cuando')
-
     return res.status(200).send({
         ok: true,
         results: results
