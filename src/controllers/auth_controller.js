@@ -1,5 +1,5 @@
 const { response, request } = require('express')
-const { registerPatient, loginPatient } = require('../models/patient')
+const { registerPatient, findPatient } = require('../models/patient')
 const fieldRegister = require('../helpers/field_register')
 const sendCodeEmail = require('../services/send_code_email')
 
@@ -19,12 +19,7 @@ const loginUser = async (req = request, res = response) => {
         })
     }
 
-    const user = await loginPatient(req.body.ci)
-
-
-
-
-
+    const user = await findPatient(req.body.ci)
 
     if (user.contrasena_paciente != req.body.password) {
         return res.status(401).send({
@@ -90,11 +85,44 @@ const verifyCode = async (req = request, res = response) => {
 
     const result = await registerPatient(user)
 
+
     return res.status(200).send({
         ok: true,
         msg: 'Se agregó el usuario correctamente',
         error: {},
-        user: result
+        user: {
+            cedula_paciente: Number(result.ci),
+            nombre_paciente: result.name,
+            apellido_paciente: result.lastName,
+            correo_paciente: result.email,
+            telefono_paciente: result.phone,
+            fecha_nacimiento_paciente: new Date(new Date(result.birthDate).toISOString()),
+            activo: 1,
+            id_rol: 3
+        }
+    })
+}
+
+const getPatient = async (req = request, res = response) => {
+    const ciExist = await fieldRegister('cedula_paciente', 'paciente', req.params.ci)
+
+    if (!ciExist) {
+        return res.status(401).send({
+            ok: false,
+            error: {
+                msg: 'Usuario inexistente'
+            },
+        })
+    }
+
+    const user = await findPatient(req.params.ci)
+
+    delete user.contrasena_paciente
+
+    return res.status(200).send({
+        ok: true,
+        error: {},
+        user: user
     })
 }
 
@@ -105,5 +133,6 @@ const verifyCode = async (req = request, res = response) => {
 module.exports = {
     loginUser,
     registerUser,
-    verifyCode
+    verifyCode,
+    getPatient
 }

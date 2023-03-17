@@ -2,7 +2,7 @@ const pool = require('../config/database')
 
 
 
-const loginPatient = async (ci) => {
+const findPatient = async (ci) => {
 
     const query = 'SELECT * FROM paciente WHERE cedula_paciente = ?'
 
@@ -16,13 +16,15 @@ const registerPatient = async (user) => {
 
     const query = 'INSERT INTO paciente(cedula_paciente, nombre_paciente, apellido_paciente, correo_paciente, telefono_paciente, fecha_nacimiento_paciente, contrasena_paciente, activo, id_rol) VALUES (?,?,?,?,?,?,?,1,3)'
 
-    await pool.query(query, [ci, name, lastName, email, phone, birthDate, password])
+    const [results] = await pool.query(query, [ci, name, lastName, email, phone, birthDate, password])
+
+    console.log(results)
 
     return user
 }
 
 
 module.exports = {
-    loginPatient,
+    findPatient,
     registerPatient
 }

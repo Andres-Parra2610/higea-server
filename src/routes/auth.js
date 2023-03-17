@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { loginUser, registerUser, verifyCode } = require('../controllers/auth_controller')
+const { loginUser, registerUser, verifyCode, getPatient } = require('../controllers/auth_controller')
 const { registerUserValidator, loginUserValidator } = require('../validations/auth_validations')
 
 const router = Router()
@@ -22,7 +22,9 @@ router.post('/register-user', registerUserValidator, registerUser)
  * @endpoint VERIFICAR CÓDIGO Y REGISTRAR USUARIO EN LA BD
  * @body {name, lastName, ci, email, phone, birthDate, gender, codeVerification}
  */
-router.post('/verify-code', verifyCode)
+router.post('/verify-code', registerUserValidator, verifyCode)
+
+router.get('/patient/:ci', getPatient)
 
 
 
