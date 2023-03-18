@@ -103,36 +103,10 @@ const verifyCode = async (req = request, res = response) => {
     })
 }
 
-const getPatient = async (req = request, res = response) => {
-    const ciExist = await fieldRegister('cedula_paciente', 'paciente', req.params.ci)
-
-    if (!ciExist) {
-        return res.status(401).send({
-            ok: false,
-            error: {
-                msg: 'Usuario inexistente'
-            },
-        })
-    }
-
-    const user = await findPatient(req.params.ci)
-
-    delete user.contrasena_paciente
-
-    return res.status(200).send({
-        ok: true,
-        error: {},
-        user: user
-    })
-}
-
-
-
 
 
 module.exports = {
     loginUser,
     registerUser,
     verifyCode,
-    getPatient
 }

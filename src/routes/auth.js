@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { loginUser, registerUser, verifyCode, getPatient } = require('../controllers/auth_controller')
+const { loginUser, registerUser, verifyCode, getPatient, verifyRevoceryPasswordCode } = require('../controllers/auth_controller')
 const { registerUserValidator, loginUserValidator } = require('../validations/auth_validations')
 
 const router = Router()
@@ -24,7 +24,6 @@ router.post('/register-user', registerUserValidator, registerUser)
  */
 router.post('/verify-code', registerUserValidator, verifyCode)
 
-router.get('/patient/:ci', getPatient)
 
 
 

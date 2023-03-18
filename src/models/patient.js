@@ -18,13 +18,23 @@ const registerPatient = async (user) => {
 
     const [results] = await pool.query(query, [ci, name, lastName, email, phone, birthDate, password])
 
-    console.log(results)
 
     return user
+}
+
+const setNewPassword = async (newPassword, userCi) => {
+
+    const query = 'UPDATE paciente SET contrasena_paciente = ? WHERE cedula_paciente = ?'
+
+    const [results] = await pool.query(query, [newPassword, userCi])
+
+    return results
+
 }
 
 
 module.exports = {
     findPatient,
-    registerPatient
+    registerPatient,
+    setNewPassword
 }
