@@ -5,7 +5,7 @@ const { insetAppoimentValidation } = require('../validations/appoiment_validatio
 
 const router = Router()
 
-router.get('/:doctor/:date/', getAppoiments)
+router.get('/:doctor', getAppoiments)
 
 router.post('/new', insetAppoimentValidation, newAppoiment)
 

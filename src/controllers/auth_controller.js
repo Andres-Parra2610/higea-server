@@ -1,5 +1,6 @@
 const { response, request } = require('express')
 const { registerPatient, findPatient } = require('../models/patient')
+const { getDoctorsDatesWorking } = require('../models/doctors')
 const fieldRegister = require('../helpers/field_register')
 const sendCodeEmail = require('../services/send_code_email')
 
@@ -8,37 +9,69 @@ const sendCodeEmail = require('../services/send_code_email')
 
 const loginUser = async (req = request, res = response) => {
 
-    const ciExist = await fieldRegister('cedula_paciente', 'paciente', req.body.ci)
+    const patietnExist = await fieldRegister('cedula_paciente', 'paciente', req.body.ci)
+    const doctorExist = await fieldRegister('cedula_medico', 'medico', req.body.ci)
 
-    if (!ciExist) {
-        return res.status(401).send({
-            ok: false,
-            error: {
-                msg: 'Usuario inexistente'
-            },
+    if (patietnExist) {
+        const user = await findPatient(req.body.ci)
+
+        if (user.contrasena_paciente != req.body.password) {
+            return res.status(401).send({
+                ok: false,
+                error: {
+                    mgs: 'El usuario o la contraseña son incorrectos'
+                },
+            })
+        }
+
+        const idRol = user.id_rol
+        delete user.contrasena_paciente
+        delete user.id_rol
+
+
+        return res.status(200).send({
+            ok: true,
+            error: {},
+            user: user,
+            idRol: idRol
+        })
+
+    } else if (doctorExist) {
+
+        const user = await getDoctorsDatesWorking(req.body.ci)
+
+
+        if (user[0].contrasena_medico != req.body.password) {
+            return res.status(401).send({
+                ok: false,
+                error: {
+                    mgs: 'El usuario o la contraseña son incorrectos'
+                },
+            })
+        }
+
+        const idRol = user[0].id_rol
+        delete user[0].contrasena_medico
+        delete user[0].nombre_dia
+        delete user[0].id_rol
+
+        return res.status(200).send({
+            ok: true,
+            error: {},
+            user: user[0],
+            idRol: idRol
         })
     }
 
-    const user = await findPatient(req.body.ci)
 
-    if (user.contrasena_paciente != req.body.password) {
-        return res.status(401).send({
-            ok: false,
-            error: {
-                mgs: 'El usuario o la contraseña son incorrectos'
-            },
-        })
-    }
-
-    delete user.contrasena_paciente
-
-    return res.status(200).send({
-        ok: true,
-        error: {},
-        user: user
+    return res.status(400).send({
+        ok: false,
+        msg: 'Usuario no registrado'
     })
 }
-//739.20
+
+
+
 
 const registerUser = async (req = request, res = response) => {
     const ciExist = await fieldRegister('cedula_paciente', 'paciente', req.body.ci)

@@ -1,6 +1,6 @@
 const pool = require('../config/database')
 
-const getAppoimentsByDoc = async (doctor, day) => {
+const getAppoimentByDay = async (doctor, day) => {
 
     const query1 = 'SELECT * FROM cita WHERE cedula_medico = ? AND fecha_cita = ?'
     const query2 = 'SELECT hora_inicio, hora_fin FROM medico_horario WHERE cedula_medico = ? GROUP BY cedula_medico'
@@ -47,13 +47,20 @@ const getAppoimentById = async (appoimentId) => {
     return results
 }
 
+const getAllAppoimentsByDoc = async (doctorCi) => {
+    const query = 'SELECT * FROM cita WHERE cedula_medico = ? ORDER BY fecha_cita ASC'
+    const [results] = await pool.query(query, [doctorCi])
+    return results
+}
+
 
 
 module.exports = {
-    getAppoimentsByDoc,
+    getAppoimentByDay,
     getAppoiment,
     insertAppoiment,
     changeAppoimentStatus,
     getAppoimentById,
-    insertExistAppoiment
+    insertExistAppoiment,
+    getAllAppoimentsByDoc
 }

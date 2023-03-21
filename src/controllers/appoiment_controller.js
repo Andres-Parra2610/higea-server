@@ -1,35 +1,50 @@
 const { response, request } = require('express')
 const {
-    getAppoimentsByDoc,
+    getAppoimentByDay,
     getAppoiment,
     insertAppoiment,
     changeAppoimentStatus,
     getAppoimentById,
-    insertExistAppoiment
+    insertExistAppoiment,
+    getAllAppoimentsByDoc
 } = require('../models/appoiments')
 
 const avilableAppoiments = require('../helpers/avilable_appoiments')
+const groupAppoimentsByDay = require('../helpers/group_appoiments')
 
 
 const getAppoiments = async (req = request, res = response) => {
-    const { doctor, date } = req.params
+    const { doctor } = req.params
+    const date = req.query.date ?? ''
 
-    if (!doctor || !date) {
+    if (!doctor) {
         return res.status(401).send({
             ok: false,
-            msg: 'Los parametros son obligatorios',
+            msg: 'El parametro doctor es obligatorio',
             results: []
         })
     }
 
-    const appoiments = await getAppoimentsByDoc(doctor, date)
+    if (doctor && date.length > 0) {
+        const appoiments = await getAppoimentByDay(doctor, date)
 
-    const result = avilableAppoiments(appoiments, doctor, date)
+        const result = avilableAppoiments(appoiments, doctor, date)
 
-    return res.status(200).send({
+        return res.status(200).send({
+            ok: true,
+            results: result
+        })
+    }
+
+    const appoiments = await getAllAppoimentsByDoc(doctor)
+
+    const result = groupAppoimentsByDay(appoiments)
+
+    res.status(200).send({
         ok: true,
         results: result
     })
+
 }
 
 
