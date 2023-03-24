@@ -18,6 +18,16 @@ const insetAppoimentValidation = [
     checkErrors
 ]
 
+
+const finishAppoimentValidation = [
+    body('note')
+        .notEmpty().withMessage('La nota no puede estar vacia'),
+    body('observation')
+        .notEmpty().withMessage('El campo de observaciones no puede estar vacio'),
+    checkErrors
+]
+
 module.exports = {
-    insetAppoimentValidation
+    insetAppoimentValidation,
+    finishAppoimentValidation
 }

@@ -6,7 +6,11 @@ const {
     changeAppoimentStatus,
     getAppoimentById,
     insertExistAppoiment,
-    getAllAppoimentsByDoc
+    getAllAppoimentsByDoc,
+    updateAppoimentToFinish,
+    findAppoimentIntoHistory,
+    updateHistory,
+    getHistory
 } = require('../models/appoiments')
 
 const avilableAppoiments = require('../helpers/avilable_appoiments')
@@ -42,7 +46,7 @@ const getAppoiments = async (req = request, res = response) => {
 
     res.status(200).send({
         ok: true,
-        results: result
+        results: result,
     })
 
 }
@@ -134,9 +138,75 @@ const registerExisteAppoiment = async (req = request, res = response) => {
 }
 
 
+
+const finishAppoiment = async (req = request, res = response) => {
+    const { note, observation, historyId } = req.body
+    const appoimentId = req.params.id
+    const existAppoiment = await findAppoimentIntoHistory(appoimentId)
+
+    if (existAppoiment.length > 0) {
+
+        if (!historyId) {
+            return res.status(400).send({
+                ok: false,
+                msg: 'Debe enviar el id de la historia médica'
+            })
+        }
+
+        await updateHistory(historyId, note, observation)
+
+
+        return res.status(200).send({
+            ok: true,
+            msg: 'La cita ha sido editada correctamente'
+        })
+    }
+
+    const result = await updateAppoimentToFinish(appoimentId, note, observation)
+
+
+    return res.status(200).send({
+        ok: true,
+        msg: 'Se ha finalizado la cita correctamente',
+        id_historial: result[0].insertId
+    })
+
+}
+
+
+const getHistoryById = async (req = request, res = response) => {
+
+    const id = req.query.id
+
+
+    const result = await getHistory(id)
+
+    if (result.length <= 0) {
+        return res.status(400).send({
+            ok: false,
+            msg: 'Ups, no se pudo encontrar la cita',
+            results: {}
+        })
+    }
+
+
+    res.status(200).send({
+        ok: true,
+        results: {
+            nota_medica: result[0].nota_medica,
+            observaciones: result[0].observaciones,
+            idhistorial: result[0].idhistorial
+        }
+
+    })
+}
+
+
 module.exports = {
     getAppoiments,
     newAppoiment,
     cancelAppoiment,
-    registerExisteAppoiment
+    registerExisteAppoiment,
+    finishAppoiment,
+    getHistoryById
 }

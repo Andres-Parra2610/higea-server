@@ -48,11 +48,43 @@ const getAppoimentById = async (appoimentId) => {
 }
 
 const getAllAppoimentsByDoc = async (doctorCi) => {
-    const query = 'SELECT * FROM cita WHERE cedula_medico = ? ORDER BY fecha_cita ASC'
+    const query = 'SELECT * FROM cita c  INNER JOIN paciente p ON c.cedula_paciente = p.cedula_paciente WHERE cedula_medico = ?  ORDER BY fecha_cita ASC'
     const [results] = await pool.query(query, [doctorCi])
     return results
 }
 
+
+const updateAppoimentToFinish = async (id, note, observations) => {
+    const query = 'UPDATE cita SET cita_estado = "finalizada" WHERE id_cita = ?'
+    const query2 = 'INSERT INTO historial(id_cita, nota_medica, observaciones) VALUES (?, ?, ?)'
+
+    const updateAppoiment = pool.query(query, [id])
+    const insertHistory = pool.query(query2, [id, note, observations])
+
+    const [update, insert] = await Promise.all([updateAppoiment, insertHistory])
+
+    return insert
+}
+
+
+const findAppoimentIntoHistory = async (id) => {
+    const query = 'SELECT * FROM historial WHERE id_cita = ?'
+    const [results] = await pool.query(query, [id])
+    return results
+}
+
+const updateHistory = async (id, note, observations) => {
+    const query = 'UPDATE historial SET nota_medica = ?, observaciones = ? WHERE idhistorial = ?'
+    const [results] = await pool.query(query, [note, observations, id])
+    return results
+}
+
+
+const getHistory = async (id) => {
+    const query = 'SELECT historial.*, cita.cita_estado FROM historial INNER JOIN cita ON cita.id_cita = historial.id_cita WHERE historial.id_cita = ?'
+    const [results] = await pool.query(query, [id])
+    return results
+}
 
 
 module.exports = {
@@ -62,5 +94,9 @@ module.exports = {
     changeAppoimentStatus,
     getAppoimentById,
     insertExistAppoiment,
-    getAllAppoimentsByDoc
+    getAllAppoimentsByDoc,
+    updateAppoimentToFinish,
+    findAppoimentIntoHistory,
+    updateHistory,
+    getHistory
 }
