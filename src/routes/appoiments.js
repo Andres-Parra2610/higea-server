@@ -4,7 +4,8 @@ const {
     newAppoiment, cancelAppoiment,
     registerExisteAppoiment,
     finishAppoiment,
-    getHistoryById
+    getHistoryById,
+    getAllAppoiments
 } = require('../controllers/appoiment_controller')
 
 const { insetAppoimentValidation, finishAppoimentValidation } = require('../validations/appoiment_validations')
@@ -13,6 +14,8 @@ const { insetAppoimentValidation, finishAppoimentValidation } = require('../vali
 const router = Router()
 
 router.get('/history', getHistoryById)
+
+router.get('/all', getAllAppoiments)
 
 router.get('/:doctor', getAppoiments)
 

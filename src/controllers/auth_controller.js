@@ -1,6 +1,7 @@
 const { response, request } = require('express')
 const { registerPatient, findPatient } = require('../models/patient')
 const { getDoctorsDatesWorking } = require('../models/doctors')
+const { findAdmin } = require('../models/admin')
 const fieldRegister = require('../helpers/field_register')
 const sendCodeEmail = require('../services/send_code_email')
 
@@ -11,6 +12,7 @@ const loginUser = async (req = request, res = response) => {
 
     const patietnExist = await fieldRegister('cedula_paciente', 'paciente', req.body.ci)
     const doctorExist = await fieldRegister('cedula_medico', 'medico', req.body.ci)
+    const adminExist = await fieldRegister('cedula_admin', 'admin', req.body.ci)
 
     if (patietnExist) {
         const user = await findPatient(req.body.ci)
@@ -61,12 +63,35 @@ const loginUser = async (req = request, res = response) => {
             user: user[0],
             idRol: idRol
         })
+
+    } else if (adminExist) {
+        const user = await findAdmin(req.body.ci)
+
+        if (user.contrasena_admin != req.body.password) {
+            return res.status(401).send({
+                ok: false,
+                error: {
+                    mgs: 'El usuario o la contraseña son incorrectos'
+                },
+            })
+        }
+
+        const idRol = user.id_rol
+        delete user.contrasena_admin
+        delete user.id_rol
+
+        return res.status(400).send({
+            ok: true,
+            error: {},
+            user: user,
+            idRol: idRol
+        })
     }
 
 
     return res.status(400).send({
         ok: false,
-        msg: 'Usuario no registrado'
+        msg: 'Usuario o contraseña incorrectos'
     })
 }
 

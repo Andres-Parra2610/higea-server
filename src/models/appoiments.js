@@ -19,6 +19,12 @@ const getAppoiment = async (appoiment) => {
     return results
 }
 
+const findAppoiments = async () => {
+    const query = 'SELECT * FROM cita c INNER JOIN paciente p ON c.cedula_paciente = p.cedula_paciente INNER JOIN medico_horario mh ON c.cedula_medico = mh.cedula_medico INNER JOIN medico m ON mh.cedula_medico = m.cedula_medico GROUP BY id_cita ORDER BY fecha_cita ASC, hora_cita ASC'
+    const [results] = await pool.query(query)
+    return results
+}
+
 const insertAppoiment = async (appoiment) => {
     const { doctorCi, patientCi, appoimentDate, appoimentHour } = appoiment
     const query = 'INSERT INTO cita(cedula_medico, cedula_paciente, fecha_cita, hora_cita, cita_estado) VALUES (?,?,?,?,?)'
@@ -81,7 +87,7 @@ const updateHistory = async (id, note, observations) => {
 
 
 const getHistory = async (id) => {
-    const query = 'SELECT historial.*, cita.cita_estado FROM historial INNER JOIN cita ON cita.id_cita = historial.id_cita WHERE historial.id_cita = ?'
+    const query = 'SELECT historial.* FROM historial INNER JOIN cita ON cita.id_cita = historial.id_cita WHERE historial.id_cita = ?'
     const [results] = await pool.query(query, [id])
     return results
 }
@@ -98,5 +104,8 @@ module.exports = {
     updateAppoimentToFinish,
     findAppoimentIntoHistory,
     updateHistory,
-    getHistory
+    getHistory,
+    findAppoiments
 }
+
+"SELECT historial.*, cita.fecha_cita, cita.hora_cita, cita.cedula_paciente, cita.cedula_medico, medico.nombre_medico, medico.apellido_medico, especialidad.nombre_especialidad FROM historial  INNER JOIN cita ON cita.id_cita = historial.id_cita  INNER JOIN medico ON cita.cedula_paciente = medico.cedula_medico INNER JOIN especialidad ON especialidad.idespecialidad = medico.id_especialidad WHERE cita.cedula_paciente = 27539771"
