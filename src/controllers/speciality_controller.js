@@ -1,5 +1,5 @@
 const { response, request } = require('express')
-const { getSpecialityByName, insertSpeciality } = require('../models/specialities')
+const { getSpeciality, insertSpeciality, removeSpeciality, updateSpeciality } = require('../models/specialities')
 const uploadImage = require('../services/upload_image')
 
 
@@ -7,8 +7,7 @@ const addSpeciality = async (req = request, res = response) => {
 
     const { nombre_especialidad, imagen_especialidad } = req.body
 
-    const findSpeciality = await getSpecialityByName(nombre_especialidad)
-
+    const findSpeciality = await getSpeciality(nombre_especialidad, '')
 
     if (findSpeciality.length >= 1) {
         return res.status(200).send({
@@ -23,7 +22,7 @@ const addSpeciality = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
-            result: {
+            results: {
                 idespecialidad: result.insertId,
                 nombre_especialidad,
                 imagen_especialidad: null
@@ -46,6 +45,102 @@ const addSpeciality = async (req = request, res = response) => {
     })
 }
 
+
+const deleteSpeciality = async (req = request, res = response) => {
+
+    const idSpeciality = req.params.id
+    const findSpeciality = await getSpeciality('', idSpeciality)
+
+    if (!idSpeciality) {
+        return res.status(400).send({
+            ok: false,
+            msg: 'Debe enviar el id de la especialidad'
+        })
+    }
+
+    if (findSpeciality.length <= 0) {
+        return res.status(400).send({
+            ok: false,
+            msg: 'La especialidad no existe'
+        })
+    }
+
+    const result = await removeSpeciality(idSpeciality)
+
+    if (result.serverStatus != 2) {
+        return res.status(500).send({
+            ok: false,
+            msg: 'Error por parte del servidor'
+        })
+    }
+
+    return res.status(200).send({
+        ok: true,
+        msg: 'La especialidad se ha eliminado de manera correcta'
+    })
+
+}
+
+
+
+const changeSpeciality = async (req = request, res = response) => {
+
+    const { nombre_especialidad, imagen_especialidad } = req.body
+    const idSpeciality = req.params.id
+
+    const findSpeciality = await getSpeciality('', idSpeciality)
+
+    if (findSpeciality.length <= 0) {
+        return res.status(200).send({
+            ok: false,
+            msg: 'La especialidad no existe'
+        })
+    }
+
+    if (!imagen_especialidad) {
+        await updateSpeciality(idSpeciality, nombre_especialidad, imagen_especialidad)
+
+        return res.status(200).send({
+            ok: true,
+            results: {
+                idespecialidad: idSpeciality,
+                nombre_especialidad,
+                imagen_especialidad: null
+            }
+        })
+    }
+
+    if (findSpeciality[0].imagen_especialidad == imagen_especialidad) {
+        await updateSpeciality(idSpeciality, nombre_especialidad, imagen_especialidad)
+
+        return res.status(200).send({
+            ok: true,
+            results: {
+                idespecialidad: idSpeciality,
+                nombre_especialidad,
+                imagen_especialidad
+            }
+        })
+    }
+
+    const imgUrl = await uploadImage(imagen_especialidad)
+    await updateSpeciality(idSpeciality, nombre_especialidad, imgUrl)
+
+
+    return res.status(200).send({
+        ok: true,
+        results: {
+            idespecialidad: idSpeciality,
+            nombre_especialidad,
+            imagen_especialidad: imgUrl,
+        },
+    })
+
+
+}
+
 module.exports = {
-    addSpeciality
+    addSpeciality,
+    deleteSpeciality,
+    changeSpeciality
 }
