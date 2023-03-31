@@ -1,6 +1,15 @@
 const pool = require('../config/database')
 
 
+
+const getAllDoctors = async () => {
+    const query = 'SELECT m.cedula_medico, m.nombre_medico, m.apellido_medico, m.telefono_medico, m.sexo_medico, m.correo_medico, m.fecha_nacimiento, md.hora_inicio, md.hora_fin, d.nombre_dia, e.nombre_especialidad FROM medico_horario md INNER JOIN medico m ON m.cedula_medico = md.cedula_medico INNER JOIN dias_semana d ON d.iddias_semana = md.id_dia INNER JOIN especialidad e ON m.id_especialidad = e.idespecialidad WHERE m.activo = 1'
+
+    const [results] = await pool.query(query)
+
+    return results
+}
+
 const findDoctor = async (ci) => {
 
     const query = 'SELECT * FROM medico WHERE cedula_paciente = ?'
@@ -40,6 +49,7 @@ const getDoctorsDatesWorking = async (ci) => {
 }
 
 module.exports = {
+    getAllDoctors,
     getDoctorsBySpeciality,
     getMedicalHoursBySpeciality,
     getDoctorsDatesWorking

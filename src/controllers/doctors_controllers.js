@@ -1,8 +1,21 @@
 const { response, request } = require('express')
 const { getSpecialities } = require('../models/specialities')
-const { getMedicalHoursBySpeciality, getDoctorsDatesWorking } = require('../models/doctors')
-const doctorDayWork = require('../helpers/doctor_day_work')
+const { getMedicalHoursBySpeciality, getDoctorsDatesWorking, getAllDoctors } = require('../models/doctors')
+const { doctorDayWork, listDays } = require('../helpers/doctor_day_work')
 
+
+
+const getDoctors = async (req = request, res = response) => {
+    const doctors = await getAllDoctors()
+
+    const daysWork = listDays(doctors)
+
+
+    return res.status(200).send({
+        ok: true,
+        results: daysWork
+    })
+}
 
 const getAllSpeciality = async (req = request, res = response) => {
 
@@ -69,6 +82,7 @@ const getDoctorDatesWork = async (req = request, res = response) => {
 
 
 module.exports = {
+    getDoctors,
     getAllSpeciality,
     getMedicalHours,
     getDoctorDatesWork
