@@ -32,9 +32,17 @@ const setNewPassword = async (newPassword, userCi) => {
 
 }
 
+const selectPatientMostVisit = async () => {
+    const query = 'SELECT p.cedula_paciente, p.nombre_paciente, p.apellido_paciente, p.correo_paciente, p.telefono_paciente, cita.cedula_paciente, COUNT(*) as visitas from cita INNER JOIN paciente p ON cita.cedula_paciente = p.cedula_paciente GROUP BY cita.cedula_paciente ORDER BY visitas DESC LIMIT 1'
+
+    const [results] = await pool.query(query)
+
+    return results
+}
 
 module.exports = {
     findPatient,
     registerPatient,
-    setNewPassword
+    setNewPassword,
+    selectPatientMostVisit
 }

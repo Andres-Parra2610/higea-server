@@ -21,6 +21,8 @@
     "moment": "^2.29.4",
     "mysql2": "^3.1.2",
     "node-fetch": "^2.6.9",
-    "nodemailer": "^6.9.1"
+    "nodemailer": "^6.9.1",
+    "pdfkit": "^0.13.0",
+    "pdfkit-construct": "^1.2.3"
   }
 }
