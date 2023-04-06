@@ -57,6 +57,15 @@ const listDays = (doctors = []) => {
         } else {
             doctorMap[key].fechas.push(nombre_dia);
         }
+
+        if (!doctorMap[key]['sexo_medico']) {
+            delete doctorMap[key]['sexo_medico']
+        }
+
+        if (!doctorMap[key]['fecha_nacimiento']) {
+            delete doctorMap[key]['fecha_nacimiento']
+        }
+
     });
 
     return Object.values(doctorMap);

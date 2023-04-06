@@ -15,9 +15,10 @@ app.use(cors())
 app.use('/auth', require('./src/routes/auth'))
 app.use('/speciality', require('./src/routes/speciality'))
 app.use('/doctor', require('./src/routes/doctor'))
+app.use('/patient', require('./src/routes/patient'))
 app.use('/appoiment', require('./src/routes/appoiments'))
 app.use('/recovery-password', require('./src/routes/recovery_password'))
-app.use('/reportes', require('./src/routes/reports'))
+app.use('/reports', require('./src/routes/reports'))
 
 
 

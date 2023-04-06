@@ -2,11 +2,11 @@ const PdfkitConstruct = require('pdfkit-construct');
 
 
 
-const initPdf = (columns = [], rows = []) => {
+const initPdf = (columns = [], rows = [], title = new String()) => {
     return new Promise((resolve, reject) => {
 
         const doc = new PdfkitConstruct({
-            size: 'A4',
+            size: 'A3',
             margins: { top: 20, left: 20, right: 20, bottom: 20 },
         });
 
@@ -15,23 +15,28 @@ const initPdf = (columns = [], rows = []) => {
 
             doc.image('src/assets/logo-higea.png', 20, 15, { width: 50 })
                 .text('Fundación Higea', 20, 80)
-                .text('Dirección de la empresa aqui')
-                .text('Teléfono de la empresa')
+                .text('Av. Vargas con Carrera 31, Edif. Badan Lara,')
+                .text('Teléfono: (251) 250.43.70')
 
             doc.fontSize(11)
             doc.font('Helvetica-Bold')
-            doc.text('Paciente que más visita la fundación', 20, 120, {
+            doc.text(title, 20, 120, {
                 align: 'center'
             })
 
         });
 
-        doc.addTable(columns, rows, {
-            cellsMaxWidth: 200,
-            width: 'fill_body',
-            headBackground: '#005CB9',
-            headColor: '#FFF'
-        })
+
+        if (rows.length > 0) {
+            doc.addTable(columns, rows, {
+                cellsMaxWidth: 200,
+                width: 'fill_body',
+                headBackground: '#005CB9',
+                headColor: '#FFF'
+            })
+
+        }
+
 
         const chunks = [];
 

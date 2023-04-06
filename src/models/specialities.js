@@ -40,11 +40,20 @@ const updateSpeciality = async (id, name, image) => {
     return results
 }
 
+const selectDoctorsSpecialities = async () => {
+    const query = 'SELECT e.idespecialidad, e.nombre_especialidad, COUNT(*) as medicos FROM medico INNER JOIN especialidad e ON medico.id_especialidad = e.idespecialidad WHERE medico.activo = 1 GROUP BY medico.id_especialidad'
+
+    const [results] = await pool.query(query)
+
+    return results
+}
+
 
 module.exports = {
     getSpecialities,
     getSpeciality,
     insertSpeciality,
     removeSpeciality,
-    updateSpeciality
+    updateSpeciality,
+    selectDoctorsSpecialities
 }

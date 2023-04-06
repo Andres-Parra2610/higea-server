@@ -92,6 +92,12 @@ const getHistory = async (id) => {
     return results
 }
 
+const selectAppoimentByMonth = async (month) => {
+    const query = 'SELECT p.cedula_paciente, p.nombre_paciente, p.apellido_paciente, m.cedula_medico, m.nombre_medico, m.apellido_medico,  TIME_FORMAT(cita.hora_cita, "%h:%i %p") as hora, DATE_FORMAT(cita.fecha_cita, "%d-%m-%Y") as fecha from cita INNER JOIN paciente p ON cita.cedula_paciente = p.cedula_paciente INNER JOIN medico m ON cita.cedula_medico = m.cedula_medico WHERE MONTH(cita.fecha_cita) = ? ORDER BY fecha ASC'
+    const [results] = await pool.query(query, month)
+    return results
+}
+
 
 module.exports = {
     getAppoimentByDay,
@@ -105,7 +111,8 @@ module.exports = {
     findAppoimentIntoHistory,
     updateHistory,
     getHistory,
-    findAppoiments
+    findAppoiments,
+    selectAppoimentByMonth
 }
 
-"SELECT historial.*, cita.fecha_cita, cita.hora_cita, cita.cedula_paciente, cita.cedula_medico, medico.nombre_medico, medico.apellido_medico, especialidad.nombre_especialidad FROM historial  INNER JOIN cita ON cita.id_cita = historial.id_cita  INNER JOIN medico ON cita.cedula_paciente = medico.cedula_medico INNER JOIN especialidad ON especialidad.idespecialidad = medico.id_especialidad WHERE cita.cedula_paciente = 27539771"
+"SELECT h.*, c.fecha_cita, c.hora_cita, c.cedula_paciente, c.cedula_medico, m.nombre_medico, m.apellido_medico, e.nombre_especialidad FROM historial h INNER JOIN cita c ON c.id_cita = h.id_cita INNER JOIN paciente p ON p.cedula_paciente = c.cedula_paciente INNER JOIN medico m ON m.cedula_medico = c.cedula_medico INNER JOIN especialidad e ON e.idespecialidad = m.id_especialidad WHERE c.cedula_paciente = 27539771"

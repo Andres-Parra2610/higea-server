@@ -114,6 +114,34 @@ const deleteDoctor = async (doctorCi) => {
 }
 
 
+const selectAllDoctors = async () => {
+    const query = 'SELECT m.cedula_medico, m.nombre_medico, m.apellido_medico, m.telefono_medico, m.correo_medico, TIME_FORMAT(md.hora_inicio, "%h:%i %p") as hora_inicio, TIME_FORMAT(md.hora_fin, "%h:%i %p") as hora_fin, d.nombre_dia, e.nombre_especialidad FROM medico_horario md INNER JOIN medico m ON m.cedula_medico = md.cedula_medico INNER JOIN dias_semana d ON d.iddias_semana = md.id_dia INNER JOIN especialidad e ON m.id_especialidad = e.idespecialidad WHERE m.activo = 1'
+
+    const [results] = await pool.query(query)
+
+    return results
+}
+
+const selectMedicalMostPatientTreated = async () => {
+    const query = 'SELECT m.cedula_medico, m.nombre_medico, m.apellido_medico, m.telefono_medico, m.correo_medico, e.nombre_especialidad, COUNT(*) as visitas from cita INNER JOIN medico m ON cita.cedula_medico = m.cedula_medico INNER JOIN especialidad e ON e.idespecialidad = m.id_especialidad WHERE cita.cita_estado = "finalizada" GROUP BY cita.cedula_medico ORDER BY visitas DESC'
+
+    const [results] = await pool.query(query)
+
+
+    return results
+}
+
+const selectMedicalMostPatientTreatedByMonth = async (month) => {
+    const query = 'SELECT m.cedula_medico, m.nombre_medico, m.apellido_medico, m.telefono_medico, m.correo_medico, e.nombre_especialidad, COUNT(*) as visitas from cita INNER JOIN medico m ON cita.cedula_medico = m.cedula_medico INNER JOIN especialidad e ON e.idespecialidad = m.id_especialidad WHERE cita.cita_estado = "finalizada" AND MONTH(cita.fecha_cita) = ? GROUP BY cita.cedula_medico ORDER BY visitas DESC'
+
+    const [results] = await pool.query(query, month)
+
+
+    return results
+}
+
+
+
 module.exports = {
     findDoctor,
     getAllDoctors,
@@ -123,6 +151,9 @@ module.exports = {
     insertDoctor,
     insertDoctorSchedule,
     updateDoctorInfo,
-    deleteDoctor
+    deleteDoctor,
+    selectAllDoctors,
+    selectMedicalMostPatientTreated,
+    selectMedicalMostPatientTreatedByMonth
 }
 
