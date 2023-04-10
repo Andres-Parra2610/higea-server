@@ -11,7 +11,8 @@ const {
     findAppoimentIntoHistory,
     updateHistory,
     getHistory,
-    findAppoiments
+    findAppoiments,
+    selectAppoimentsByPatient
 } = require('../models/appoiments')
 
 const avilableAppoiments = require('../helpers/avilable_appoiments')
@@ -223,7 +224,7 @@ const getHistoryById = async (req = request, res = response) => {
     if (result.length <= 0) {
         return res.status(400).send({
             ok: false,
-            msg: 'Ups, no se pudo encontrar la cita',
+            msg: 'Ups, no se pudo encontrar la historia médica',
             results: {}
         })
     }
@@ -241,6 +242,53 @@ const getHistoryById = async (req = request, res = response) => {
 }
 
 
+const getAppoimentByPatient = async (req = request, res = response) => {
+
+
+    if (!req.params.ci) {
+        return res.status.send({
+            ok: false,
+            msg: 'La cédula de identidad es obligatoria'
+        })
+    }
+
+    const appoiments = await selectAppoimentsByPatient(req.params.ci)
+
+    const results = appoiments.map(appoiment => {
+        return {
+            id_cita: appoiment.id_cita,
+            cedula_medico: appoiment.cedula_medico,
+            cedula_paciente: appoiment.cedula_paciente,
+            fecha_cita: appoiment.fecha_cita,
+            hora_cita: appoiment.hora_cita,
+            cita_estado: appoiment.cita_estado,
+            paciente: {
+                cedula_paciente: appoiment.cedula_paciente,
+                nombre_paciente: appoiment.nombre_paciente,
+                apellido_paciente: appoiment.apellido_paciente,
+                correo_paciente: appoiment.correo_paciente,
+                telefono_paciente: appoiment.telefono_paciente,
+                fecha_nacimiento_paciente: appoiment.fecha_nacimiento_paciente
+            },
+            doctor: {
+                cedula_medico: appoiment.cedula_medico,
+                nombre_medico: appoiment.nombre_medico,
+                apellido_medico: appoiment.apellido_medico,
+                sexo_medico: appoiment.sexo_medico,
+                hora_inicio: appoiment.hora_inicio,
+                hora_fin: appoiment.hora_fin,
+            }
+        }
+    })
+
+
+    res.status(200).send({
+        ok: true,
+        results: results
+    })
+}
+
+
 module.exports = {
     getAppoiments,
     newAppoiment,
@@ -248,5 +296,6 @@ module.exports = {
     registerExisteAppoiment,
     finishAppoiment,
     getHistoryById,
-    getAllAppoiments
+    getAllAppoiments,
+    getAppoimentByPatient
 }

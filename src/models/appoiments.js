@@ -98,6 +98,12 @@ const selectAppoimentByMonth = async (month) => {
     return results
 }
 
+const selectAppoimentsByPatient = async (patientCi) => {
+    const query = 'SELECT * FROM cita c INNER JOIN paciente p ON c.cedula_paciente = p.cedula_paciente INNER JOIN medico_horario mh ON c.cedula_medico = mh.cedula_medico INNER JOIN medico m ON mh.cedula_medico = m.cedula_medico WHERE c.cedula_paciente = ? AND fecha_cita > CURDATE() GROUP BY id_cita ORDER BY c.fecha_cita, c.hora_cita'
+    const [results] = await pool.query(query, [patientCi])
+    return results
+}
+
 
 module.exports = {
     getAppoimentByDay,
@@ -112,7 +118,7 @@ module.exports = {
     updateHistory,
     getHistory,
     findAppoiments,
-    selectAppoimentByMonth
+    selectAppoimentByMonth,
+    selectAppoimentsByPatient
 }
 
-"SELECT h.*, c.fecha_cita, c.hora_cita, c.cedula_paciente, c.cedula_medico, m.nombre_medico, m.apellido_medico, e.nombre_especialidad FROM historial h INNER JOIN cita c ON c.id_cita = h.id_cita INNER JOIN paciente p ON p.cedula_paciente = c.cedula_paciente INNER JOIN medico m ON m.cedula_medico = c.cedula_medico INNER JOIN especialidad e ON e.idespecialidad = m.id_especialidad WHERE c.cedula_paciente = 27539771"

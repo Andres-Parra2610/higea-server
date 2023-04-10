@@ -18,6 +18,7 @@ app.use('/doctor', require('./src/routes/doctor'))
 app.use('/patient', require('./src/routes/patient'))
 app.use('/appoiment', require('./src/routes/appoiments'))
 app.use('/recovery-password', require('./src/routes/recovery_password'))
+app.use('/history', require('./src/routes/history'))
 app.use('/reports', require('./src/routes/reports'))
 
 
