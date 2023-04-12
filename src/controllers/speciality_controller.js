@@ -22,6 +22,7 @@ const addSpeciality = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
+            msg: 'La especialidad se ha agregado con éxito',
             results: {
                 idespecialidad: result.insertId,
                 nombre_especialidad,
@@ -36,6 +37,7 @@ const addSpeciality = async (req = request, res = response) => {
 
     return res.status(200).send({
         ok: true,
+        msg: 'La especialidad se ha agregado con éxito',
         results: {
             idespecialidad: result.insertId,
             nombre_especialidad,
@@ -102,6 +104,7 @@ const changeSpeciality = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
+            msg: 'La especialidad se ha editado con éxito',
             results: {
                 idespecialidad: idSpeciality,
                 nombre_especialidad,
@@ -115,6 +118,7 @@ const changeSpeciality = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
+            msg: 'La especialidad se ha editado con éxito',
             results: {
                 idespecialidad: idSpeciality,
                 nombre_especialidad,
@@ -129,6 +133,7 @@ const changeSpeciality = async (req = request, res = response) => {
 
     return res.status(200).send({
         ok: true,
+        msg: 'La especialidad se ha editado con éxito',
         results: {
             idespecialidad: idSpeciality,
             nombre_especialidad,

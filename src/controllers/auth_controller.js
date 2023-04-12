@@ -20,9 +20,8 @@ const loginUser = async (req = request, res = response) => {
         if (user.contrasena_paciente != req.body.password) {
             return res.status(401).send({
                 ok: false,
-                error: {
-                    mgs: 'El usuario o la contraseña son incorrectos'
-                },
+                mgs: 'El usuario o la contraseña son incorrectos'
+
             })
         }
 
@@ -33,7 +32,7 @@ const loginUser = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
-            error: {},
+            msg: 'Login correcto',
             user: user,
             idRol: idRol
         })
@@ -46,9 +45,8 @@ const loginUser = async (req = request, res = response) => {
         if (user[0].contrasena_medico != req.body.password) {
             return res.status(401).send({
                 ok: false,
-                error: {
-                    mgs: 'El usuario o la contraseña son incorrectos'
-                },
+                mgs: 'El usuario o la contraseña son incorrectos'
+
             })
         }
 
@@ -59,7 +57,7 @@ const loginUser = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
-            error: {},
+            msg: 'Login correcto',
             user: user[0],
             idRol: idRol
         })
@@ -70,9 +68,8 @@ const loginUser = async (req = request, res = response) => {
         if (user.contrasena_admin != req.body.password) {
             return res.status(401).send({
                 ok: false,
-                error: {
-                    mgs: 'El usuario o la contraseña son incorrectos'
-                },
+                mgs: 'El usuario o la contraseña son incorrectos'
+
             })
         }
 
@@ -82,7 +79,7 @@ const loginUser = async (req = request, res = response) => {
 
         return res.status(400).send({
             ok: true,
-            error: {},
+            msg: 'Login correcto',
             user: user,
             idRol: idRol
         })
@@ -105,20 +102,21 @@ const registerUser = async (req = request, res = response) => {
     if (ciExist || emailExist) {
         return res.status(401).send({
             ok: false,
-            error: {
-                msg: 'El usuario ya existe'
-            },
+            msg: 'El usuario ya existe',
             results: []
         })
     }
 
-    await sendCodeEmail(req.body.email)
+    await sendCodeEmail(
+        req.body.email,
+        'Bienvenido',
+        'Gracias por confiar en nosotros y registrarte en la app. Primero, confirma tu cuenta. Ingresa el siguiente código dentro de la aplicación'
+    )
 
 
     return res.status(200).send({
         ok: true,
         msg: 'Código enviado exisotasmente',
-        error: {},
         results: []
     })
 }
@@ -134,9 +132,7 @@ const verifyCode = async (req = request, res = response) => {
     if (req.body.codeVerification != process.env.VERIFICATION_CODE) {
         return res.status(401).send({
             ok: false,
-            error: {
-                msg: 'El código de verificación es inválido'
-            },
+            msg: 'El código de verificación es inválido',
             results: []
         })
     }
@@ -147,7 +143,6 @@ const verifyCode = async (req = request, res = response) => {
     return res.status(200).send({
         ok: true,
         msg: 'Se agregó el usuario correctamente',
-        error: {},
         user: {
             cedula_paciente: Number(result.ci),
             nombre_paciente: result.name,

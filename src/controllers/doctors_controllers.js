@@ -21,6 +21,7 @@ const getDoctors = async (req = request, res = response) => {
 
     return res.status(200).send({
         ok: true,
+        msg: 'Resultado de todos los doctores',
         results: daysWork
     })
 }
@@ -31,6 +32,7 @@ const getAllSpeciality = async (req = request, res = response) => {
 
     return res.status(200).send({
         ok: true,
+        msg: 'Resultado de todas las especialidades',
         results: results
     })
 }
@@ -59,6 +61,7 @@ const getMedicalHours = async (req = request, res = response) => {
 
     return res.status(200).send({
         ok: true,
+        msg: 'Resultado de los médicos por horario',
         results: results
     })
 }
@@ -83,6 +86,7 @@ const getDoctorDatesWork = async (req = request, res = response) => {
 
     return res.status(200).send({
         ok: true,
+        msg: 'Resultado de los días laborales de los doctores',
         results: daysDoctorWork
     })
 }
@@ -96,7 +100,7 @@ const newDoctor = async (req = request, res = response) => {
     if (doctor.length >= 1) {
         return res.status(400).send({
             ok: false,
-            msg: "El doctor ya está registrado"
+            msg: 'El doctor ya está registrado'
         })
     }
 

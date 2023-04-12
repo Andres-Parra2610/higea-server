@@ -1,8 +1,9 @@
 const transporter = require('../config/email')
+const HTMLTemplate = require('../assets/template')
 
 
 
-const sendCodeEmail = async (email) => {
+const sendCodeEmail = async (email, head, body) => {
 
     const codeVerification = Date.now().toString().substring(7, 12);
     process.env.VERIFICATION_CODE = codeVerification
@@ -12,11 +13,8 @@ const sendCodeEmail = async (email) => {
         await transporter.sendMail({
             from: '"Higea" <higea@gmail.com>',
             to: email,
-            subject: "Hello ✔",
-            html: `
-                <h2>Código de verificación</h2>
-                <p>${codeVerification}</p>
-            `,
+            subject: "Código de verificación.",
+            html: HTMLTemplate(codeVerification, head, body),
         });
 
 

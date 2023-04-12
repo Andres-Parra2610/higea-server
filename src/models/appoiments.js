@@ -105,6 +105,15 @@ const selectAppoimentsByPatient = async (patientCi) => {
 }
 
 
+const getAppoimentByHour = async (appoiment) => {
+    const { patientCi, appoimentDate, appoimentHour } = appoiment
+    const query = 'SELECT * FROM cita WHERE cedula_paciente = ? AND fecha_cita = ? AND hora_cita = ?'
+    const [results] = await pool.query(query, [patientCi, appoimentDate, appoimentHour])
+
+    return results
+}
+
+
 module.exports = {
     getAppoimentByDay,
     getAppoiment,
@@ -119,6 +128,7 @@ module.exports = {
     getHistory,
     findAppoiments,
     selectAppoimentByMonth,
-    selectAppoimentsByPatient
+    selectAppoimentsByPatient,
+    getAppoimentByHour
 }
 

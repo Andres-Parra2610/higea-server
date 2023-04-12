@@ -12,7 +12,8 @@ const {
     updateHistory,
     getHistory,
     findAppoiments,
-    selectAppoimentsByPatient
+    selectAppoimentsByPatient,
+    getAppoimentByHour
 } = require('../models/appoiments')
 
 const avilableAppoiments = require('../helpers/avilable_appoiments')
@@ -38,6 +39,7 @@ const getAppoiments = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
+            msg: 'Resultado de las citas',
             results: result
         })
     }
@@ -48,6 +50,7 @@ const getAppoiments = async (req = request, res = response) => {
 
     res.status(200).send({
         ok: true,
+        msg: 'Resultado de las citas',
         results: result,
     })
 
@@ -87,6 +90,7 @@ const getAllAppoiments = async (req = request, res = response) => {
 
     res.status(200).send({
         ok: true,
+        msg: 'Todas las citas médicas',
         results: results
     })
 }
@@ -97,11 +101,21 @@ const newAppoiment = async (req = request, res = response) => {
     const appoimentBody = req.body
 
     const appoiment = await getAppoiment(appoimentBody)
+    const repeatHourAppoiment = await getAppoimentByHour(appoimentBody)
+
+    console.log(repeatHourAppoiment)
 
     if (appoiment.length >= 1) {
         return res.status(401).send({
             ok: false,
             msg: 'La cita ya está ocupada',
+        })
+    }
+
+    if (repeatHourAppoiment.length >= 1) {
+        return res.status(401).send({
+            ok: false,
+            msg: 'Ya tiene una cita reservada a la misma hora'
         })
     }
 
@@ -142,7 +156,7 @@ const cancelAppoiment = async (req = request, res = response) => {
 
     return res.status(200).send({
         ok: true,
-        msg: 'Cita cancelada'
+        msg: 'Cita cancelada con éxito'
     })
 }
 
@@ -232,6 +246,7 @@ const getHistoryById = async (req = request, res = response) => {
 
     res.status(200).send({
         ok: true,
+        msg: 'Resultado de la historia médica',
         results: {
             nota_medica: result[0].nota_medica,
             observaciones: result[0].observaciones,
@@ -284,6 +299,7 @@ const getAppoimentByPatient = async (req = request, res = response) => {
 
     res.status(200).send({
         ok: true,
+        msg: 'Resultado de la cita médica por paciente',
         results: results
     })
 }

@@ -10,6 +10,7 @@ const getAllPatient = async (req = request, res = response) => {
 
         return res.status(200).send({
             ok: true,
+            msg: 'Resultado de todos los pacientes',
             results: patient
         })
 

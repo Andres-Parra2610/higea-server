@@ -10,21 +10,23 @@ const getPatient = async (req = request, res = response) => {
     if (!ciExist) {
         return res.status(401).send({
             ok: false,
-            error: {
-                msg: 'Usuario inexistente'
-            },
+            msg: 'Usuario inexistente'
         })
     }
 
     const user = await findPatient(req.params.ci)
 
-    await sendCodeEmail(user.correo_paciente)
+    await sendCodeEmail(
+        user.correo_paciente,
+        'Recuperar contraseña',
+        'Código de recuperación de contraseña. Ingresa el siguiente código: '
+    )
 
     delete user.contrasena_paciente
 
     return res.status(200).send({
         ok: true,
-        error: {},
+        msg: 'Resultado del paciente',
         user: user
     })
 }
@@ -38,9 +40,7 @@ const verifyRevoceryPasswordCode = async (req = request, res = response) => {
     if (codeVerification != process.env.VERIFICATION_CODE) {
         return res.status(401).send({
             ok: false,
-            error: {
-                msg: 'El código de verificación es inválido'
-            },
+            msg: 'El código de verificación es inválido',
             results: []
         })
     }
