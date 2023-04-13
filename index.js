@@ -21,7 +21,7 @@ app.use('/recovery-password', require('./src/routes/recovery_password'))
 app.use('/history', require('./src/routes/history'))
 app.use('/reports', require('./src/routes/reports'))
 
-
+console.log('¿?')
 
 app.listen(process.env.SERVER_PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${process.env.SERVER_PORT}`)
